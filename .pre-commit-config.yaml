@@ -1,0 +1,35 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+    -   id: no-commit-to-branch
+        args: ['--branch', 'main']
+-   repo: local
+    hooks:
+    -   id: assert_ascii
+        language: system
+        name: Check file encodings
+        entry: bash -c 'for file in "$@"; do file -i $file | grep -q "ascii\|binary" || (echo "Non-ascii in $file" && exit 1); done' --
+    -   id: clang-format
+        language: system
+        name: Run clang-format
+        entry: bash -c 'for file in "$@"; do diff $file <(clang-format-11 $file); if [ $? = 1 ]; then echo $file; exit 1; fi; done' --
+        types: [text]
+        files: '.(c|h|cpp|hpp)$'
+    -   id: cpptest
+        language: system
+        name: Run C++ tests
+        entry: bash -c 'cd `git rev-parse --show-toplevel`; rm -rf build/pre-commit; mkdir -p build/pre-commit; cd build/pre-commit; cmake ../.. -DCMAKE_BUILD_TYPE=Release -DXGRAD_BUILD_TEST=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && make && ./cpp/tests/test_xgrad' --
+        pass_filenames: false
+    -   id: clang-tidy
+        language: system
+        name: Run clang-tidy
+        entry: bash -c 'cd `git rev-parse --show-toplevel`; clang-tidy-11 $@ -p build/pre-commit -extra-arg=-Wno-unknown-warning-option' --
+        types: [text]
+        files: '.(c|h|cpp|hpp)$'
