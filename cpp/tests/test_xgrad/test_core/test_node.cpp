@@ -4,6 +4,9 @@
 
 #include <CppUTest/TestHarness.h>
 
+namespace test_xgrad
+{
+
 TEST_GROUP(node){};
 
 TEST(node, parent)
@@ -18,3 +21,5 @@ TEST(node, parent)
         CHECK_TRUE(b.parent() == a);
     }
 }
+
+} // namespace test_xgrad
