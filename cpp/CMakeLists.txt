@@ -8,5 +8,9 @@ file(GLOB_RECURSE xgrad_src
 include(../cmake/XGradAddCompileOptions.cmake)
 
 add_library(xgrad ${xgrad_src})
-target_include_directories(xgrad PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(xgrad
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src)
 xgrad_add_compile_options(xgrad)
