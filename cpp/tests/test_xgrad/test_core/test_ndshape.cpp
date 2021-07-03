@@ -1,4 +1,4 @@
-#include "xgrad/core/ndshape.hpp"
+#include "xgrad/core.hpp"
 
 #include <CppUTest/TestHarness.h>
 

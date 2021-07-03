@@ -10,8 +10,8 @@ namespace test_xgrad
 
 static xgrad::ndarray<float> array[] = {
     xgrad::ndarray<float>(),
-    xgrad::ndarray<float>(std::initializer_list<std::size_t>({2})),
-    xgrad::ndarray<float>(std::initializer_list<std::size_t>({3, 4})),
+    xgrad::ndarray<float>(xgrad::ndshape({2})),
+    xgrad::ndarray<float>(xgrad::ndshape({3, 4})),
 };
 
 static const std::size_t expected_ndim[] = {
@@ -41,15 +41,12 @@ TEST_GROUP(ndarray){};
 TEST(ndarray, init)
 {
     xgrad::ndarray<float>(
-        std::vector<std::size_t>({2UL, 3UL, 2UL}),
+        xgrad::ndshape({2UL, 3UL, 2UL}),
         std::make_shared<std::vector<float>>(12UL, 1.f));
     CHECK_THROWS(
         std::invalid_argument,
-        xgrad::ndarray<float>(std::vector<std::size_t>({2UL, 0UL, 2UL})));
-    CHECK_THROWS(
-        std::invalid_argument,
         xgrad::ndarray<float>(
-            std::vector<std::size_t>({2UL, 3UL, 2UL}),
+            xgrad::ndshape({2UL, 3UL, 2UL}),
             std::make_shared<std::vector<float>>(13UL, 0.f)));
 }
 
@@ -71,7 +68,7 @@ TEST(ndarray, shape_axis)
 {
     for (auto i = sizeof(array) / sizeof(xgrad::ndarray<float>); i--;) {
         if (expected_length[i] < 0) {
-            CHECK_THROWS(std::invalid_argument, array[i].shape(axis[i]));
+            CHECK_THROWS(std::out_of_range, array[i].shape(axis[i]));
         } else {
             CHECK_EQUAL(
                 static_cast<std::size_t>(expected_length[i]),
@@ -91,7 +88,7 @@ TEST(ndarray, strides_axis)
 {
     for (auto i = sizeof(array) / sizeof(xgrad::ndarray<float>); i--;) {
         if (expected_stride[i] < 0) {
-            CHECK_THROWS(std::invalid_argument, array[i].strides(axis[i]));
+            CHECK_THROWS(std::out_of_range, array[i].strides(axis[i]));
         } else {
             CHECK_EQUAL(
                 static_cast<std::size_t>(expected_stride[i]),
