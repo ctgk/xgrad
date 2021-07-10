@@ -3,6 +3,7 @@
 
 #include "xgrad/math/cos.hpp"
 #include "xgrad/math/exp.hpp"
+#include "xgrad/math/log.hpp"
 #include "xgrad/math/negate.hpp"
 #include "xgrad/math/sin.hpp"
 #include "xgrad/math/square.hpp"
