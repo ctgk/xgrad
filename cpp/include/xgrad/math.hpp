@@ -25,6 +25,21 @@ ndarray<T> operator-(const ndarray<T>& x);
 template <class T>
 ndarray<T> square(const ndarray<T>& x);
 
+// trigonometric functions
+
+/**
+ * @brief Element-wise sinusoidal function
+ *
+ * @tparam T
+ * Data type, float or double
+ * @param x
+ * Input array
+ * @return ndarray<T>
+ * Element-wise sin values.
+ */
+template <class T>
+ndarray<T> sin(const ndarray<T>& x);
+
 } // namespace xgrad
 
 #endif // XGRAD_MATH_HPP
