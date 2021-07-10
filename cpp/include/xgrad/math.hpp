@@ -40,6 +40,19 @@ ndarray<T> square(const ndarray<T>& x);
 template <class T>
 ndarray<T> sin(const ndarray<T>& x);
 
+/**
+ * @brief Element-wise cosine function
+ *
+ * @tparam T
+ * Data type, float or double
+ * @param x
+ * Input array
+ * @return ndarray<T>
+ * Element-wise cos values
+ */
+template <class T>
+ndarray<T> cos(const ndarray<T>& x);
+
 } // namespace xgrad
 
 #endif // XGRAD_MATH_HPP
