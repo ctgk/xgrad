@@ -55,7 +55,7 @@ public:
             const T* y = out.data()->data();
             const T* dy = out.grad()->data();
             for (auto ii = size; ii--;) {
-                dx[ii] += m_backward(dy[ii], y[ii], x[ii]);
+                dx[ii] += dy[ii] * m_backward(x[ii], y[ii]);
             }
         } else {
             throw std::runtime_error("Argument of unary_operation must not be "

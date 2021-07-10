@@ -16,9 +16,9 @@ struct negate_operation
     };
     struct backward
     {
-        T operator()(const T dy, const T, const T) const
+        T operator()(const T, const T) const
         {
-            return -dy;
+            return static_cast<T>(-1);
         }
     };
 };
