@@ -41,4 +41,12 @@ TEST(sin, backward)
     }
 }
 
+TEST(sin, numerical_gradient)
+{
+    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<double>); ii--;) {
+        const auto grad = numerical_gradient(xgrad::sin<double>, input[ii]);
+        test_backward<double>(input[ii], xgrad::sin<double>, grad);
+    }
+}
+
 } // namespace test_xgrad

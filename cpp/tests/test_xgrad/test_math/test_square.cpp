@@ -43,4 +43,12 @@ TEST(square, backward)
     }
 }
 
+TEST(square, numerical_gradient)
+{
+    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<double>); ii--;) {
+        const auto grad = numerical_gradient(xgrad::square<double>, input[ii]);
+        test_backward<double>(input[ii], xgrad::square<double>, grad);
+    }
+}
+
 } // namespace test_xgrad

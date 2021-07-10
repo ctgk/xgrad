@@ -44,4 +44,12 @@ TEST(tan, backward)
     }
 }
 
+TEST(tan, numerical_gradient)
+{
+    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<double>); ii--;) {
+        const auto grad = numerical_gradient(xgrad::tan<double>, input[ii]);
+        test_backward<double>(input[ii], xgrad::tan<double>, grad);
+    }
+}
+
 } // namespace test_xgrad

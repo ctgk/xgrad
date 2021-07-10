@@ -43,4 +43,16 @@ TEST(negate, backward)
     }
 }
 
+TEST(negate, numerical_gradient)
+{
+    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<float>); ii--;) {
+        const auto a = xgrad::ndarray<double>(
+            input[ii].shape(),
+            std::vector<double>(
+                input[ii].cdata(), input[ii].cdata() + input[ii].size()));
+        const auto grad = numerical_gradient(xgrad::negate<double>, a);
+        test_backward<double>(a, xgrad::negate<double>, grad);
+    }
+}
+
 } // namespace test_xgrad

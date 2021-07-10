@@ -41,4 +41,12 @@ TEST(cos, backward)
     }
 }
 
+TEST(cos, numerical_gradient)
+{
+    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<double>); ii--;) {
+        const auto grad = numerical_gradient(xgrad::cos<double>, input[ii]);
+        test_backward<double>(input[ii], xgrad::cos<double>, grad);
+    }
+}
+
 } // namespace test_xgrad
