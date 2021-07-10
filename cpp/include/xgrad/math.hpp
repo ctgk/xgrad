@@ -8,5 +8,6 @@
 #include "xgrad/math/sin.hpp"
 #include "xgrad/math/square.hpp"
 #include "xgrad/math/tan.hpp"
+#include "xgrad/math/tanh.hpp"
 
 #endif // XGRAD_MATH_HPP
