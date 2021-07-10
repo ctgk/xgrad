@@ -9,11 +9,23 @@
 namespace xgrad
 {
 
+template <class T>
+class ndarray;
+
 namespace internal
 {
 
 template <class T>
 class ndarray_node;
+
+template <class T>
+class operation_node;
+
+template <class T>
+const std::shared_ptr<ndarray_node<T>>& get_node(const ndarray<T>& a);
+
+template <class T>
+ndarray<T> create_ndarray(const std::shared_ptr<operation_node<T>>& op);
 
 } // namespace internal
 
@@ -27,11 +39,27 @@ class ndarray
 private:
     const std::shared_ptr<internal::ndarray_node<T>> m_node;
 
+    ndarray(const std::shared_ptr<internal::operation_node<T>>& op);
+
+    friend const std::shared_ptr<internal::ndarray_node<T>>&
+    internal::get_node<T>(const ndarray<T>&);
+    friend ndarray<T> internal::create_ndarray<T>(
+        const std::shared_ptr<internal::operation_node<T>>& op);
+
 public:
     ndarray();
     ndarray(
         const ndshape& shape,
         const std::shared_ptr<std::vector<T>>& data = nullptr);
+    ndarray(const ndshape& shape, const std::vector<T>& data);
+
+    /**
+     * @brief Return whether if the array is a view of another.
+     *
+     * @return true The array is a view of another.
+     * @return false The array is not a view of another.
+     */
+    bool is_view() const;
 
     /**
      * @brief Return dimensionality of this array.
@@ -40,6 +68,14 @@ public:
      * Dimensionality of this array.
      */
     std::size_t ndim() const;
+
+    /**
+     * @brief Return number of element contained in this array.
+     *
+     * @return std::size_t
+     * Number of element contained in this array.
+     */
+    std::size_t size() const;
 
     /**
      * @brief Return shape of this array.
@@ -110,6 +146,14 @@ public:
     const T* cgrad() const;
 
     /**
+     * @brief Return ndarray of grad values.
+     *
+     * @return ndarray<T>
+     * ndarray of grad values.
+     */
+    ndarray<T> grad_to_array() const;
+
+    /**
      * @brief Return a flag whether the array is variable.
      *
      * @return true The array is variable.
@@ -130,6 +174,8 @@ public:
      *
      */
     void backward();
+
+    std::size_t num_backward() const;
 };
 
 } // namespace xgrad

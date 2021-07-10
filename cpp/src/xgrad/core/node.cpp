@@ -130,7 +130,7 @@ ndarray_node<T>::ndarray_node() : ndarray_node(ndshape({}), nullptr)
 template <class T>
 ndarray_node<T>::ndarray_node(
     const ndshape& shape, const std::shared_ptr<std::vector<T>>& data)
-    : m_is_view(false), m_shape(shape),
+    : computational_graph_node(), m_is_view(false), m_shape(shape),
       m_strides(utility::shape_to_strides(shape)),
       m_data(
           (data == nullptr)
@@ -142,11 +142,13 @@ ndarray_node<T>::ndarray_node(
 
 template <class T>
 ndarray_node<T>::ndarray_node(const std::shared_ptr<operation_node<T>>& op)
-    : m_is_view(false), m_shape(op->output_shape()),
+    : computational_graph_node(), m_is_view(false),
+      m_shape(op->output_shape()),
       m_strides(utility::shape_to_strides(m_shape)), m_data(op->output_data()),
       m_grad(op->output_grad()), m_parent(op)
 {
     op->increment_num_children();
+    op->forward(this);
 }
 
 template <class T>

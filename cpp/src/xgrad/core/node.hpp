@@ -17,7 +17,12 @@ private:
     std::size_t m_num_backward;
 
 public:
-    computational_graph_node() = default;
+    computational_graph_node() : m_num_children(0UL), m_num_backward(0UL)
+    {
+    }
+    virtual ~computational_graph_node()
+    {
+    }
 
     /**
      * @brief Return number of nodes under this node.
