@@ -6,6 +6,7 @@
 #include "xgrad/math/log.hpp"
 #include "xgrad/math/negate.hpp"
 #include "xgrad/math/sin.hpp"
+#include "xgrad/math/sinh.hpp"
 #include "xgrad/math/square.hpp"
 #include "xgrad/math/tan.hpp"
 #include "xgrad/math/tanh.hpp"
