@@ -1,11 +1,36 @@
+#include <cmath>
+
 #include "xgrad/core/ndarray.hpp"
-#include "xgrad/math.hpp"
+#include "xgrad/math/cos.hpp"
 
 #include "xgrad/core/unary_operation.hpp"
-#include "xgrad/math/cos.hpp"
 
 namespace xgrad
 {
+
+namespace internal
+{
+
+template <class T>
+struct cos_operation
+{
+    struct forward
+    {
+        T operator()(const T x) const
+        {
+            return std::cos(x);
+        }
+    };
+    struct backward
+    {
+        T operator()(const T x, const T) const
+        {
+            return -std::sin(x);
+        }
+    };
+};
+
+} // namespace internal
 
 template <class T>
 ndarray<T> cos(const ndarray<T>& x)

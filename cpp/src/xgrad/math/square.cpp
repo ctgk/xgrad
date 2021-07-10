@@ -1,11 +1,34 @@
+#include "xgrad/math/square.hpp"
 #include "xgrad/core/ndarray.hpp"
-#include "xgrad/math.hpp"
 
 #include "xgrad/core/unary_operation.hpp"
-#include "xgrad/math/square.hpp"
 
 namespace xgrad
 {
+
+namespace internal
+{
+
+template <class T>
+struct square_operation
+{
+    struct forward
+    {
+        T operator()(const T x) const
+        {
+            return x * x;
+        }
+    };
+    struct backward
+    {
+        T operator()(const T x, const T) const
+        {
+            return x + x;
+        }
+    };
+};
+
+} // namespace internal
 
 template <class T>
 ndarray<T> square(const ndarray<T>& x)

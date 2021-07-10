@@ -1,11 +1,34 @@
+#include "xgrad/math/negate.hpp"
 #include "xgrad/core/ndarray.hpp"
-#include "xgrad/math.hpp"
 
 #include "xgrad/core/unary_operation.hpp"
-#include "xgrad/math/negate.hpp"
 
 namespace xgrad
 {
+
+namespace internal
+{
+
+template <class T>
+struct negate_operation
+{
+    struct forward
+    {
+        T operator()(const T x) const
+        {
+            return -x;
+        }
+    };
+    struct backward
+    {
+        T operator()(const T, const T) const
+        {
+            return static_cast<T>(-1);
+        }
+    };
+};
+
+} // namespace internal
 
 template <class T>
 ndarray<T> negate(const ndarray<T>& x)
