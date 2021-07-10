@@ -3,6 +3,8 @@
 #include "xgrad/core.hpp"
 #include "xgrad/math.hpp"
 
+#include "test_xgrad/test_backward.hpp"
+
 #include <CppUTest/TestHarness.h>
 
 namespace test_xgrad
@@ -36,15 +38,8 @@ TEST(negate, forward)
 TEST(negate, backward)
 {
     for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<float>); ii--;) {
-        auto a = xgrad::ndarray<float>(
-            input[ii].shape(),
-            std::vector<float>(
-                input[ii].cdata(), input[ii].cdata() + input[ii].size()));
-        a.requires_grad(true);
-        auto out = xgrad::negate(a);
-        out.backward();
-        const auto actual = a.grad_to_array();
-        CHECK_TRUE(xgrad::allclose(actual, expected_backward[ii]));
+        test_backward<float>(
+            input[ii], xgrad::negate<float>, expected_backward[ii]);
     }
 }
 
