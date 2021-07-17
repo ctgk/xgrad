@@ -174,8 +174,6 @@ public:
      *
      */
     void backward();
-
-    std::size_t num_backward() const;
 };
 
 } // namespace xgrad

@@ -170,12 +170,6 @@ void tensor<T>::backward()
     m_node->backward();
 }
 
-template <class T>
-std::size_t tensor<T>::num_backward() const
-{
-    return m_node->num_backward();
-}
-
 template class tensor<float>;
 template class tensor<double>;
 

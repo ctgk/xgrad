@@ -33,8 +33,14 @@ repos:
         entry: bash -c 'cd `git rev-parse --show-toplevel`; clang-tidy-11 $@ -p build/pre-commit -extra-arg=-Wno-unknown-warning-option' --
         types: [text]
         files: '.(c|h|cpp|hpp)$'
+        exclude: 'python/src/.*.(c|h|cpp|hpp)$'
     -   id: flake8
         name: Check Python format
         entry: flake8 --count --show-source --statistics
         language: system
         types: [python]
+    -   id: pytest
+        language: system
+        name: Run Python tests
+        entry: bash -c 'cd `git rev-parse --showtoplevel`; rm python/xgrad/_xgrad*.so; python setup.py clean --all; python setup.py test' --
+        pass_filenames: false
