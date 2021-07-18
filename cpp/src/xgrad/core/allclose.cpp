@@ -7,7 +7,7 @@ namespace xgrad
 
 template <class T>
 bool allclose(
-    const ndarray<T>& a, const ndarray<T>& b, const T rtol, const T atol)
+    const tensor<T>& a, const tensor<T>& b, const T rtol, const T atol)
 {
     if (a.shape() != b.shape()) {
         return false;
@@ -27,12 +27,9 @@ bool allclose(
     return true;
 }
 
+template bool
+allclose(const tensor<float>&, const tensor<float>&, const float, const float);
 template bool allclose(
-    const ndarray<float>&, const ndarray<float>&, const float, const float);
-template bool allclose(
-    const ndarray<double>&,
-    const ndarray<double>&,
-    const double,
-    const double);
+    const tensor<double>&, const tensor<double>&, const double, const double);
 
 } // namespace xgrad

@@ -9,7 +9,7 @@ namespace xgrad::internal
 
 template <class T>
 operation_node<T>::operation_node(
-    const std::initializer_list<std::shared_ptr<ndarray_node<T>>>& arguments)
+    const std::initializer_list<std::shared_ptr<tensor_node<T>>>& arguments)
     : m_arguments(arguments)
 {
     for (auto&& arg : arguments) {
@@ -26,7 +26,7 @@ operation_node<T>::~operation_node()
 }
 
 template <class T>
-const std::vector<std::shared_ptr<ndarray_node<T>>>&
+const std::vector<std::shared_ptr<tensor_node<T>>>&
 operation_node<T>::arguments() const
 {
     return m_arguments;
@@ -75,7 +75,7 @@ std::shared_ptr<std::vector<T>> operation_node<T>::output_grad() const
 }
 
 template <class T>
-void operation_node<T>::forward(ndarray_node<T>* const out)
+void operation_node<T>::forward(tensor_node<T>* const out)
 {
     for (auto&& arg : m_arguments) {
         arg->reset_num_backward();
@@ -84,12 +84,12 @@ void operation_node<T>::forward(ndarray_node<T>* const out)
 }
 
 template <class T>
-void operation_node<T>::forward_impl(ndarray_node<T>* const) const
+void operation_node<T>::forward_impl(tensor_node<T>* const) const
 {
 }
 
 template <class T>
-void operation_node<T>::backward(const ndarray_node<T>& out)
+void operation_node<T>::backward(const tensor_node<T>& out)
 {
     for (auto&& arg : m_arguments) {
         if (arg->requires_grad() && (arg->num_backward() == 0)
@@ -115,7 +115,7 @@ void operation_node<T>::backward(const ndarray_node<T>& out)
 }
 
 template <class T>
-void operation_node<T>::backward_impl(const ndarray_node<T>&) const
+void operation_node<T>::backward_impl(const tensor_node<T>&) const
 {
 }
 
@@ -123,12 +123,12 @@ template class operation_node<float>;
 template class operation_node<double>;
 
 template <class T>
-ndarray_node<T>::ndarray_node() : ndarray_node(ndshape({}), nullptr)
+tensor_node<T>::tensor_node() : tensor_node(ndshape({}), nullptr)
 {
 }
 
 template <class T>
-ndarray_node<T>::ndarray_node(
+tensor_node<T>::tensor_node(
     const ndshape& shape, const std::shared_ptr<std::vector<T>>& data)
     : computational_graph_node(), m_is_view(false), m_shape(shape),
       m_strides(utility::shape_to_strides(shape)),
@@ -141,7 +141,7 @@ ndarray_node<T>::ndarray_node(
 }
 
 template <class T>
-ndarray_node<T>::ndarray_node(const std::shared_ptr<operation_node<T>>& op)
+tensor_node<T>::tensor_node(const std::shared_ptr<operation_node<T>>& op)
     : computational_graph_node(), m_is_view(false),
       m_shape(op->output_shape()),
       m_strides(utility::shape_to_strides(m_shape)), m_data(op->output_data()),
@@ -152,43 +152,43 @@ ndarray_node<T>::ndarray_node(const std::shared_ptr<operation_node<T>>& op)
 }
 
 template <class T>
-bool ndarray_node<T>::is_view() const
+bool tensor_node<T>::is_view() const
 {
     return m_is_view;
 }
 
 template <class T>
-const ndshape& ndarray_node<T>::shape() const
+const ndshape& tensor_node<T>::shape() const
 {
     return m_shape;
 }
 
 template <class T>
-const std::vector<std::size_t>& ndarray_node<T>::strides() const
+const std::vector<std::size_t>& tensor_node<T>::strides() const
 {
     return m_strides;
 }
 
 template <class T>
-const std::shared_ptr<std::vector<T>>& ndarray_node<T>::data() const
+const std::shared_ptr<std::vector<T>>& tensor_node<T>::data() const
 {
     return m_data;
 }
 
 template <class T>
-const std::shared_ptr<std::vector<T>>& ndarray_node<T>::grad() const
+const std::shared_ptr<std::vector<T>>& tensor_node<T>::grad() const
 {
     return m_grad;
 }
 
 template <class T>
-bool ndarray_node<T>::requires_grad() const
+bool tensor_node<T>::requires_grad() const
 {
     return m_grad != nullptr;
 }
 
 template <class T>
-void ndarray_node<T>::requires_grad(const bool flag)
+void tensor_node<T>::requires_grad(const bool flag)
 {
     if (flag && m_grad == nullptr) {
         m_grad = std::make_shared<std::vector<T>>(
@@ -204,7 +204,7 @@ void ndarray_node<T>::requires_grad(const bool flag)
 }
 
 template <class T>
-void ndarray_node<T>::backward()
+void tensor_node<T>::backward()
 {
     if (m_parent == nullptr)
         return;
@@ -213,7 +213,7 @@ void ndarray_node<T>::backward()
     }
 }
 
-template class ndarray_node<float>;
-template class ndarray_node<double>;
+template class tensor_node<float>;
+template class tensor_node<double>;
 
 } // namespace xgrad::internal

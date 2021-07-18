@@ -12,24 +12,24 @@ namespace test_xgrad
 
 TEST_GROUP(negate){};
 
-static const xgrad::ndarray<float> input[] = {
-    xgrad::ndarray<float>(),
-    xgrad::ndarray<float>(xgrad::ndshape({3, 2}), {1, -2, 3, -4, 5, -6}),
+static const xgrad::tensor<float> input[] = {
+    xgrad::tensor<float>(),
+    xgrad::tensor<float>(xgrad::ndshape({3, 2}), {1, -2, 3, -4, 5, -6}),
 };
 
-static const xgrad::ndarray<float> expected_forward[] = {
-    xgrad::ndarray<float>(),
-    xgrad::ndarray<float>(xgrad::ndshape({3, 2}), {-1, 2, -3, 4, -5, 6}),
+static const xgrad::tensor<float> expected_forward[] = {
+    xgrad::tensor<float>(),
+    xgrad::tensor<float>(xgrad::ndshape({3, 2}), {-1, 2, -3, 4, -5, 6}),
 };
 
-static const xgrad::ndarray<float> expected_backward[] = {
-    xgrad::ndarray<float>(xgrad::ndshape(), {-1}),
-    xgrad::ndarray<float>(xgrad::ndshape({3, 2}), {-1, -1, -1, -1, -1, -1}),
+static const xgrad::tensor<float> expected_backward[] = {
+    xgrad::tensor<float>(xgrad::ndshape(), {-1}),
+    xgrad::tensor<float>(xgrad::ndshape({3, 2}), {-1, -1, -1, -1, -1, -1}),
 };
 
 TEST(negate, forward)
 {
-    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<float>); ii--;) {
+    for (auto ii = sizeof(input) / sizeof(xgrad::tensor<float>); ii--;) {
         const auto actual = xgrad::negate(input[ii]);
         CHECK_TRUE(xgrad::allclose(actual, expected_forward[ii]));
     }
@@ -37,7 +37,7 @@ TEST(negate, forward)
 
 TEST(negate, backward)
 {
-    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<float>); ii--;) {
+    for (auto ii = sizeof(input) / sizeof(xgrad::tensor<float>); ii--;) {
         test_backward<float>(
             input[ii], xgrad::negate<float>, expected_backward[ii]);
     }
@@ -45,8 +45,8 @@ TEST(negate, backward)
 
 TEST(negate, numerical_gradient)
 {
-    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<float>); ii--;) {
-        const auto a = xgrad::ndarray<double>(
+    for (auto ii = sizeof(input) / sizeof(xgrad::tensor<float>); ii--;) {
+        const auto a = xgrad::tensor<double>(
             input[ii].shape(),
             std::vector<double>(
                 input[ii].cdata(), input[ii].cdata() + input[ii].size()));

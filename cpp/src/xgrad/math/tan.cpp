@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 #include "xgrad/math/tan.hpp"
 
 #include "xgrad/core/unary_operation.hpp"
@@ -34,15 +34,15 @@ struct tan_operation
 } // namespace internal
 
 template <class T>
-ndarray<T> tan(const ndarray<T>& x)
+tensor<T> tan(const tensor<T>& x)
 {
     const auto& node = internal::get_node(x);
     const std::shared_ptr<internal::operation_node<T>>& op = std::make_shared<
         internal::unary_operation<T, internal::tan_operation>>(node);
-    return internal::create_ndarray(op);
+    return internal::create_tensor(op);
 }
 
-template ndarray<float> tan<float>(const ndarray<float>&);
-template ndarray<double> tan<double>(const ndarray<double>&);
+template tensor<float> tan<float>(const tensor<float>&);
+template tensor<double> tan<double>(const tensor<double>&);
 
 } // namespace xgrad

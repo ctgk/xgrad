@@ -13,18 +13,18 @@ namespace test_xgrad
 
 TEST_GROUP(tanh){};
 
-static const xgrad::ndarray<double> input[] = {
-    xgrad::ndarray<double>(xgrad::ndshape({4}), {0, -1, 1, 0.5}),
+static const xgrad::tensor<double> input[] = {
+    xgrad::tensor<double>(xgrad::ndshape({4}), {0, -1, 1, 0.5}),
 };
 
-static const xgrad::ndarray<double> expected_forward[] = {
-    xgrad::ndarray<double>(
+static const xgrad::tensor<double> expected_forward[] = {
+    xgrad::tensor<double>(
         xgrad::ndshape({4}),
         {0, std::tanh(-1.), std::tanh(1.), std::tanh(0.5)}),
 };
 
-static const xgrad::ndarray<double> expected_backward[] = {
-    xgrad::ndarray<double>(
+static const xgrad::tensor<double> expected_backward[] = {
+    xgrad::tensor<double>(
         xgrad::ndshape({4}),
         {1 / (std::cosh(0.) * std::cosh(0.)),
          1 / (std::cosh(-1.) * std::cosh(-1.)),
@@ -34,7 +34,7 @@ static const xgrad::ndarray<double> expected_backward[] = {
 
 TEST(tanh, forward)
 {
-    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<double>); ii--;) {
+    for (auto ii = sizeof(input) / sizeof(xgrad::tensor<double>); ii--;) {
         const auto actual = xgrad::tanh(input[ii]);
         CHECK_TRUE(xgrad::allclose(actual, expected_forward[ii]));
     }
@@ -42,7 +42,7 @@ TEST(tanh, forward)
 
 TEST(tanh, backward)
 {
-    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<double>); ii--;) {
+    for (auto ii = sizeof(input) / sizeof(xgrad::tensor<double>); ii--;) {
         test_backward<double>(
             input[ii], xgrad::tanh<double>, expected_backward[ii]);
     }
@@ -50,7 +50,7 @@ TEST(tanh, backward)
 
 TEST(tanh, numerical_gradient)
 {
-    for (auto ii = sizeof(input) / sizeof(xgrad::ndarray<double>); ii--;) {
+    for (auto ii = sizeof(input) / sizeof(xgrad::tensor<double>); ii--;) {
         const auto grad = numerical_gradient(xgrad::tanh<double>, input[ii]);
         test_backward<double>(input[ii], xgrad::tanh<double>, grad);
     }

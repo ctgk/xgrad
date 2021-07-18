@@ -1,7 +1,7 @@
 #ifndef XGRAD_MATH_NEGATE_HPP
 #define XGRAD_MATH_NEGATE_HPP
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 
 namespace xgrad
 {
@@ -13,11 +13,11 @@ namespace xgrad
  * Data type, float or double
  * @param x
  * Input array
- * @return ndarray<T>
+ * @return tensor<T>
  * Element-wise negate valued array
  */
 template <class T>
-ndarray<T> negate(const ndarray<T>& x);
+tensor<T> negate(const tensor<T>& x);
 
 /**
  * @brief return element-wise negate valued array.
@@ -26,11 +26,11 @@ ndarray<T> negate(const ndarray<T>& x);
  * Data type, float or double
  * @param x
  * Input array
- * @return ndarray<T>
+ * @return tensor<T>
  * Element-wise negate valued array
  */
 template <class T>
-ndarray<T> operator-(const ndarray<T>& x);
+tensor<T> operator-(const tensor<T>& x);
 
 } // namespace xgrad
 

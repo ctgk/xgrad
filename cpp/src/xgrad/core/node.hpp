@@ -1,11 +1,11 @@
-#ifndef XGRAD_CORE_NOE_IMPL_HPP
-#define XGRAD_CORE_NOE_IMPL_HPP
+#ifndef XGRAD_CORE_NODE_HPP
+#define XGRAD_CORE_NODE_HPP
 
 #include <initializer_list>
 #include <memory>
 
-#include "xgrad/core/ndarray.hpp"
 #include "xgrad/core/ndshape.hpp"
+#include "xgrad/core/tensor.hpp"
 
 namespace xgrad::internal
 {
@@ -66,28 +66,28 @@ template <class T>
 class operation_node : public computational_graph_node
 {
 protected:
-    const std::vector<std::shared_ptr<ndarray_node<T>>> m_arguments;
+    const std::vector<std::shared_ptr<tensor_node<T>>> m_arguments;
 
 public:
     operation_node() = default;
     operation_node(
-        const std::initializer_list<std::shared_ptr<ndarray_node<T>>>&
+        const std::initializer_list<std::shared_ptr<tensor_node<T>>>&
             arguments);
     virtual ~operation_node();
-    const std::vector<std::shared_ptr<ndarray_node<T>>>& arguments() const;
+    const std::vector<std::shared_ptr<tensor_node<T>>>& arguments() const;
     bool has_differentiable_arguments() const;
     virtual bool differentiable() const;
     virtual ndshape output_shape() const;
     virtual std::shared_ptr<std::vector<T>> output_data() const;
     virtual std::shared_ptr<std::vector<T>> output_grad() const;
-    void forward(ndarray_node<T>* const out);
-    virtual void forward_impl(ndarray_node<T>* const) const;
-    void backward(const ndarray_node<T>& out);
-    virtual void backward_impl(const ndarray_node<T>& out) const;
+    void forward(tensor_node<T>* const out);
+    virtual void forward_impl(tensor_node<T>* const) const;
+    void backward(const tensor_node<T>& out);
+    virtual void backward_impl(const tensor_node<T>& out) const;
 };
 
 template <class T>
-class ndarray_node : public computational_graph_node
+class tensor_node : public computational_graph_node
 {
 private:
     const bool m_is_view; //!< true if an array is a view of another array.
@@ -98,11 +98,11 @@ private:
     std::shared_ptr<operation_node<T>> m_parent;
 
 public:
-    ndarray_node();
-    ndarray_node(
+    tensor_node();
+    tensor_node(
         const ndshape& shape,
         const std::shared_ptr<std::vector<T>>& data = nullptr);
-    ndarray_node(const std::shared_ptr<operation_node<T>>& op);
+    tensor_node(const std::shared_ptr<operation_node<T>>& op);
 
     bool is_view() const;
     const ndshape& shape() const;
@@ -117,4 +117,4 @@ public:
 
 } // namespace xgrad::internal
 
-#endif // XGRAD_CORE_NOE_IMPL_HPP
+#endif // XGRAD_CORE_NODE_HPP

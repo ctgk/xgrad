@@ -1,7 +1,7 @@
 #ifndef XGRAD_MATH_SQUARE_HPP
 #define XGRAD_MATH_SQUARE_HPP
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 
 namespace xgrad
 {
@@ -13,11 +13,11 @@ namespace xgrad
  * Desired data type, float or double.
  * @param x
  * Input array.
- * @return ndarray<T>
+ * @return tensor<T>
  * Array with element-wise squared values.
  */
 template <class T>
-ndarray<T> square(const ndarray<T>& x);
+tensor<T> square(const tensor<T>& x);
 
 } // namespace xgrad
 

@@ -1,7 +1,7 @@
 #ifndef XGRAD_MATH_COS_HPP
 #define XGRAD_MATH_COS_HPP
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 
 namespace xgrad
 {
@@ -13,11 +13,11 @@ namespace xgrad
  * Data type, float or double
  * @param x
  * Input array
- * @return ndarray<T>
+ * @return tensor<T>
  * Element-wise cos values
  */
 template <class T>
-ndarray<T> cos(const ndarray<T>& x);
+tensor<T> cos(const tensor<T>& x);
 
 } // namespace xgrad
 
