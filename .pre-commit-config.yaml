@@ -42,5 +42,5 @@ repos:
     -   id: pytest
         language: system
         name: Run Python tests
-        entry: bash -c 'cd `git rev-parse --showtoplevel`; rm python/xgrad/_xgrad*.so; python setup.py clean --all; python setup.py test' --
+        entry: bash -c 'cd `git rev-parse --showtoplevel`; rm python/xgrad/*.so; python setup.py clean --all; pip install -e .[develop]; pytest' --
         pass_filenames: false

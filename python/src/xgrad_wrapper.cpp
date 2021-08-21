@@ -3,6 +3,7 @@
 #include <pybind11/stl.h>
 
 #include "xgrad/core.hpp"
+#include "xgrad/math.hpp"
 
 namespace py = pybind11;
 namespace xg = xgrad;
@@ -103,10 +104,42 @@ void export_tensor(py::module& m)
         .def_property(
             "requires_grad",
             py::overload_cast<>(&xg::tensor<float>::requires_grad, py::const_),
-            py::overload_cast<const bool>(&xg::tensor<float>::requires_grad));
+            py::overload_cast<const bool>(&xg::tensor<float>::requires_grad))
+        .def("backward", &xg::tensor<float>::backward)
+        .def("__neg__", [](const xg::tensor<float>& self) { return -self; });
+}
+
+void export_unary_operations(py::module& m)
+{
+    const char* const unary_operation_str[]
+        = {"cos",
+           "cosh",
+           "exp",
+           "log",
+           "negate",
+           "sin",
+           "sinh",
+           "square",
+           "tan",
+           "tanh"};
+    xg::tensor<float> (*unary_operation[])(const xg::tensor<float>&)
+        = {xg::cos<float>,
+           xg::cosh<float>,
+           xg::exp<float>,
+           xg::log<float>,
+           xg::negate<float>,
+           xg::sin<float>,
+           xg::sinh<float>,
+           xg::square<float>,
+           xg::tan<float>,
+           xg::tanh<float>};
+    for (auto ii = sizeof(unary_operation_str) / sizeof(const char*); ii--;) {
+        m.def(unary_operation_str[ii], unary_operation[ii]);
+    }
 }
 
 PYBIND11_MODULE(_xgrad_cpp, m)
 {
     export_tensor(m);
+    export_unary_operations(m);
 }
