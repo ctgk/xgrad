@@ -1,7 +1,7 @@
 #ifndef XGRAD_MATH_TAN_HPP
 #define XGRAD_MATH_TAN_HPP
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 
 namespace xgrad
 {
@@ -13,11 +13,11 @@ namespace xgrad
  * Data type, float or double
  * @param x
  * Input array
- * @return ndarray<T>
+ * @return tensor<T>
  * Element-wise tan values
  */
 template <class T>
-ndarray<T> tan(const ndarray<T>& x);
+tensor<T> tan(const tensor<T>& x);
 
 } // namespace xgrad
 

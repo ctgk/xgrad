@@ -1,5 +1,5 @@
-#ifndef XGRAD_CORE_NDARRAY_HPP
-#define XGRAD_CORE_NDARRAY_HPP
+#ifndef XGRAD_CORE_TENSOR_HPP
+#define XGRAD_CORE_TENSOR_HPP
 
 #include <memory>
 #include <type_traits>
@@ -10,48 +10,48 @@ namespace xgrad
 {
 
 template <class T>
-class ndarray;
+class tensor;
 
 namespace internal
 {
 
 template <class T>
-class ndarray_node;
+class tensor_node;
 
 template <class T>
 class operation_node;
 
 template <class T>
-const std::shared_ptr<ndarray_node<T>>& get_node(const ndarray<T>& a);
+const std::shared_ptr<tensor_node<T>>& get_node(const tensor<T>& a);
 
 template <class T>
-ndarray<T> create_ndarray(const std::shared_ptr<operation_node<T>>& op);
+tensor<T> create_tensor(const std::shared_ptr<operation_node<T>>& op);
 
 } // namespace internal
 
 template <class T>
-class ndarray
+class tensor
 {
     static_assert(
         std::is_same<T, float>::value || std::is_same<T, double>::value,
-        "Only xgrad::ndarray<float> or xgrad::ndarray<double> is allowed.");
+        "Only xgrad::tensor<float> or xgrad::tensor<double> is allowed.");
 
 private:
-    const std::shared_ptr<internal::ndarray_node<T>> m_node;
+    const std::shared_ptr<internal::tensor_node<T>> m_node;
 
-    ndarray(const std::shared_ptr<internal::operation_node<T>>& op);
+    tensor(const std::shared_ptr<internal::operation_node<T>>& op);
 
-    friend const std::shared_ptr<internal::ndarray_node<T>>&
-    internal::get_node<T>(const ndarray<T>&);
-    friend ndarray<T> internal::create_ndarray<T>(
+    friend const std::shared_ptr<internal::tensor_node<T>>&
+    internal::get_node<T>(const tensor<T>&);
+    friend tensor<T> internal::create_tensor<T>(
         const std::shared_ptr<internal::operation_node<T>>& op);
 
 public:
-    ndarray();
-    ndarray(
+    tensor();
+    tensor(
         const ndshape& shape,
         const std::shared_ptr<std::vector<T>>& data = nullptr);
-    ndarray(const ndshape& shape, const std::vector<T>& data);
+    tensor(const ndshape& shape, const std::vector<T>& data);
 
     /**
      * @brief Return whether if the array is a view of another.
@@ -146,12 +146,12 @@ public:
     const T* cgrad() const;
 
     /**
-     * @brief Return ndarray of grad values.
+     * @brief Return tensor of grad values.
      *
-     * @return ndarray<T>
-     * ndarray of grad values.
+     * @return tensor<T>
+     * tensor of grad values.
      */
-    ndarray<T> grad_to_array() const;
+    tensor<T> grad_to_array() const;
 
     /**
      * @brief Return a flag whether the array is variable.
@@ -174,10 +174,8 @@ public:
      *
      */
     void backward();
-
-    std::size_t num_backward() const;
 };
 
 } // namespace xgrad
 
-#endif // XGRAD_CORE_NDARRAY_HPP
+#endif // XGRAD_CORE_TENSOR_HPP

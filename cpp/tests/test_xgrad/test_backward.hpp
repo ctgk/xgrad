@@ -10,19 +10,19 @@ namespace test_xgrad
 {
 
 template <class Func>
-inline xgrad::ndarray<double> numerical_gradient(
-    Func function, const xgrad::ndarray<double>& arg, const double eps = 1e-5)
+inline xgrad::tensor<double> numerical_gradient(
+    Func function, const xgrad::tensor<double>& arg, const double eps = 1e-5)
 {
     if (arg.is_view()) {
         throw std::runtime_error("");
     }
-    auto grad = xgrad::ndarray<double>(arg.shape());
+    auto grad = xgrad::tensor<double>(arg.shape());
     for (auto ii = arg.size(); ii--;) {
-        auto p = xgrad::ndarray<double>(
+        auto p = xgrad::tensor<double>(
             arg.shape(),
             std::vector<double>(arg.cdata(), arg.cdata() + arg.size()));
         p.data()[ii] += eps;
-        auto m = xgrad::ndarray<double>(
+        auto m = xgrad::tensor<double>(
             arg.shape(),
             std::vector<double>(arg.cdata(), arg.cdata() + arg.size()));
         m.data()[ii] -= eps;
@@ -39,15 +39,15 @@ inline xgrad::ndarray<double> numerical_gradient(
 
 template <class T>
 inline bool test_backward(
-    const xgrad::ndarray<T>& input,
-    const std::function<xgrad::ndarray<T>(const xgrad::ndarray<T>&)>&
+    const xgrad::tensor<T>& input,
+    const std::function<xgrad::tensor<T>(const xgrad::tensor<T>&)>&
         forward_function,
-    const xgrad::ndarray<T>& expected)
+    const xgrad::tensor<T>& expected)
 {
     if (input.is_view()) {
         throw std::runtime_error("");
     }
-    auto a = xgrad::ndarray<T>(
+    auto a = xgrad::tensor<T>(
         input.shape(),
         std::vector<T>(input.cdata(), input.cdata() + input.size()));
     a.requires_grad(true);

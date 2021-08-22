@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 #include "xgrad/math/cosh.hpp"
 
 #include "xgrad/core/unary_operation.hpp"
@@ -33,15 +33,15 @@ struct cosh_operation
 } // namespace internal
 
 template <class T>
-ndarray<T> cosh(const ndarray<T>& x)
+tensor<T> cosh(const tensor<T>& x)
 {
     const auto& node = internal::get_node(x);
     const std::shared_ptr<internal::operation_node<T>>& op = std::make_shared<
         internal::unary_operation<T, internal::cosh_operation>>(node);
-    return internal::create_ndarray(op);
+    return internal::create_tensor(op);
 }
 
-template ndarray<float> cosh<float>(const ndarray<float>&);
-template ndarray<double> cosh<double>(const ndarray<double>&);
+template tensor<float> cosh<float>(const tensor<float>&);
+template tensor<double> cosh<double>(const tensor<double>&);
 
 } // namespace xgrad

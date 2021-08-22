@@ -1,7 +1,7 @@
 #ifndef XGRAD_MATH_EXP_HPP
 #define XGRAD_MATH_EXP_HPP
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 
 namespace xgrad
 {
@@ -13,11 +13,11 @@ namespace xgrad
  * Data type, float or double
  * @param x
  * Input array
- * @return ndarray<T>
+ * @return tensor<T>
  * Element-wise exponentiated array
  */
 template <class T>
-ndarray<T> exp(const ndarray<T>& x);
+tensor<T> exp(const tensor<T>& x);
 
 } // namespace xgrad
 

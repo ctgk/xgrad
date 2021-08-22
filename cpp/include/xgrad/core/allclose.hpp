@@ -1,15 +1,15 @@
 #ifndef XGRAD_CORE_ALLCLOSE_HPP
 #define XGRAD_CORE_ALLCLOSE_HPP
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 
 namespace xgrad
 {
 
 template <class T>
 bool allclose(
-    const ndarray<T>& a,
-    const ndarray<T>& b,
+    const tensor<T>& a,
+    const tensor<T>& b,
     const T rtol = static_cast<T>(1e-5),
     const T atol = static_cast<T>(1e-8));
 

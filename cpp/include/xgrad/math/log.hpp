@@ -1,7 +1,7 @@
 #ifndef XGRAD_MATH_LOG_HPP
 #define XGRAD_MATH_LOG_HPP
 
-#include "xgrad/core/ndarray.hpp"
+#include "xgrad/core/tensor.hpp"
 
 namespace xgrad
 {
@@ -13,11 +13,11 @@ namespace xgrad
  * Data type, float or double
  * @param x
  * Input array
- * @return ndarray<T>
+ * @return tensor<T>
  * Element-wise natural logarithm of the input array
  */
 template <class T>
-ndarray<T> log(const ndarray<T>& x);
+tensor<T> log(const tensor<T>& x);
 
 } // namespace xgrad
 

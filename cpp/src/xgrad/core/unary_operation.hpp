@@ -16,12 +16,12 @@ private:
     typename Operation<T>::backward m_backward;
 
 public:
-    unary_operation(const std::shared_ptr<ndarray_node<T>>& x)
+    unary_operation(const std::shared_ptr<tensor_node<T>>& x)
         : operation_node<T>({x}), m_forward(), m_backward()
     {
     }
     unary_operation(
-        const std::shared_ptr<ndarray_node<T>>& x,
+        const std::shared_ptr<tensor_node<T>>& x,
         typename Operation<T>::forward f,
         typename Operation<T>::backward df)
         : operation_node<T>({x}, m_forward(f), m_backward(df))
@@ -31,9 +31,9 @@ public:
     {
         return this->m_arguments[0]->shape();
     }
-    void forward_impl(ndarray_node<T>* const out) const final
+    void forward_impl(tensor_node<T>* const out) const final
     {
-        const ndarray_node<T>& a = *this->m_arguments[0];
+        const tensor_node<T>& a = *this->m_arguments[0];
         if (!a.is_view()) {
             std::transform(
                 a.data()->cbegin(),
@@ -45,9 +45,9 @@ public:
                                      "a view of another array.");
         }
     }
-    void backward_impl(const ndarray_node<T>& out) const final
+    void backward_impl(const tensor_node<T>& out) const final
     {
-        const ndarray_node<T>& a = *this->m_arguments[0];
+        const tensor_node<T>& a = *this->m_arguments[0];
         if (!a.is_view()) {
             const auto size = a.shape().product();
             const T* x = a.data()->data();
