@@ -131,6 +131,18 @@ void export_unary_operations(py::module& m)
            xg::square<float>,
            xg::tan<float>,
            xg::tanh<float>};
+    const char* const docstrings[] = {
+        XGRAD_COS_DOCSTRING,
+        XGRAD_COSH_DOCSTRING,
+        XGRAD_EXP_DOCSTRING,
+        XGRAD_LOG_DOCSTRING,
+        XGRAD_NEGATE_DOCSTRING,
+        XGRAD_SIN_DOCSTRING,
+        XGRAD_SINH_DOCSTRING,
+        XGRAD_SQUARE_DOCSTRING,
+        XGRAD_TAN_DOCSTRING,
+        XGRAD_TANH_DOCSTRING,
+    };
     for (auto ii = sizeof(unary_operation_str) / sizeof(const char*); ii--;) {
         m.def(unary_operation_str[ii], unary_operation[ii]);
         m.def(
@@ -140,7 +152,8 @@ void export_unary_operations(py::module& m)
                  float,
                  py::array::c_style | py::array::forcecast>& a) {
                 return unary_operation[ii](array_to_tensor(a));
-            });
+            },
+            docstrings[ii]);
     }
 }
 

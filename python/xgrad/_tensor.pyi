@@ -8,8 +8,7 @@ class Tensor:
 
     Examples
     --------
-    >>> import numpy as np
-    >>> a = Tensor(np.array([[1, 2, 3], [4, 5, 6]]))
+    >>> a = xg.Tensor(np.array([[1, 2, 3], [4, 5, 6]]))
     >>> a
     array([[1., 2., 3.],
            [4., 5., 6.]], dtype=float32)
@@ -21,6 +20,7 @@ class Tensor:
     [2, 3]
     >>> a.strides
     [3, 1]
+
     """
 
     def __init__(self, arg0: np.ndarray) -> None:

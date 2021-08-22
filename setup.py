@@ -90,6 +90,7 @@ extension_modules = [
         include_dirs=['cpp/include', 'cpp/src/', 'python/src'],  # -I
         define_macros=[
             *_macro_docstring_pairs('xgrad/_tensor.pyi'),
+            *_macro_docstring_pairs('xgrad/_math.pyi'),
         ],  # (str1, str2) -D<str1>=<str2>
         undef_macros=[],  # [string] -D<string>
         library_dirs=[],  # [string] -L<string>
