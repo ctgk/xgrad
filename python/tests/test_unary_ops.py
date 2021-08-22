@@ -71,7 +71,7 @@ def parameter(request):
 
 
 def test_forward(parameter):
-    actual = parameter['op'](xg.Tensor(parameter['input']))
+    actual = parameter['op'](parameter['input'])
     assert np.allclose(actual.data, parameter['forward'], rtol=0, atol=1e-3)
 
 

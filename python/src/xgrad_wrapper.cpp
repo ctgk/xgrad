@@ -8,20 +8,22 @@
 namespace py = pybind11;
 namespace xg = xgrad;
 
+xg::tensor<float> ndarray_to_tensor(
+    const py::array_t<float, py::array::c_style | py::array::forcecast>& a)
+{
+    const auto shape = xg::ndshape(
+        std::vector<std::size_t>(a.shape(), a.shape() + a.ndim()));
+    const auto data = std::vector<float>(
+        reinterpret_cast<float*>(a.request().ptr),
+        reinterpret_cast<float*>(a.request().ptr) + a.size());
+    return xg::tensor<float>(shape, data);
+}
+
 void export_tensor(py::module& m)
 {
     py::class_<xg::tensor<float>>(
         m, "Tensor", "Class for N-dimensional tensor")
-        .def(py::init([](const py::array_t<
-                          float,
-                          py::array::c_style | py::array::forcecast>& a) {
-            const auto shape = xg::ndshape(
-                std::vector<std::size_t>(a.shape(), a.shape() + a.ndim()));
-            const auto data = std::vector<float>(
-                reinterpret_cast<float*>(a.request().ptr),
-                reinterpret_cast<float*>(a.request().ptr) + a.size());
-            return xg::tensor<float>(shape, data);
-        }))
+        .def(py::init(&ndarray_to_tensor))
         .def_property_readonly("is_view", &xg::tensor<float>::is_view)
         .def_property_readonly(
             "ndim", &xg::tensor<float>::ndim, "Dimesionality of the tensor.")
@@ -135,6 +137,14 @@ void export_unary_operations(py::module& m)
            xg::tanh<float>};
     for (auto ii = sizeof(unary_operation_str) / sizeof(const char*); ii--;) {
         m.def(unary_operation_str[ii], unary_operation[ii]);
+        m.def(
+            unary_operation_str[ii],
+            [unary_operation,
+             ii](const py::array_t<
+                 float,
+                 py::array::c_style | py::array::forcecast>& a) {
+                return unary_operation[ii](ndarray_to_tensor(a));
+            });
     }
 }
 
